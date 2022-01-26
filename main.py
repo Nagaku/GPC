@@ -8,6 +8,7 @@ img = ''
 shape = ''
 ARGV_TEMP = []
 ACTIONS = []
+OPTION = ''
 
 def get_input():
     print(argv)
@@ -15,7 +16,7 @@ def get_input():
         print('Masukkan Opsi')
         exit()
 
-    OPTION = ''
+    global OPTION
 
     for i, iv in enumerate(argv):
         if iv == '--rotate':
@@ -30,17 +31,17 @@ def get_input():
             OPTION = 'blur'
         elif iv == '--greyscale':
             OPTION = 'greyscale'
-            parse_input(iv, OPTION)
+            parse_input(iv)
         else:
             if i > 0:
-                parse_input(iv, OPTION)
+                parse_input(iv)
 
-def parse_input(argv, OPTION):
+def parse_input(argv):
     global ACTIONS
     global filename
     global ARGV_TEMP
+    global OPTION
     if OPTION == '':
-        print('filename')
         if not re.match('.*(.jpg|.jfif|.png)$', argv): 
             print('File gambar tidak valid, :', argv)
             exit()
@@ -139,7 +140,6 @@ def execute_actions():
 
 def main():
     get_input()
-    print(filename)
     try:
         global img 
         global shape 
