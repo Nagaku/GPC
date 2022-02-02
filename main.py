@@ -10,6 +10,7 @@ ARGV_TEMP = []
 ACTIONS = []
 OPTION = ''
 
+# Check input dari terminal
 def get_input():
     print(argv)
     if len(argv) < 2:
@@ -36,6 +37,7 @@ def get_input():
             if i > 0:
                 parse_input(iv)
 
+# Menyiapkan proses 
 def parse_input(argv):
     global ACTIONS
     global filename
@@ -68,21 +70,31 @@ def parse_input(argv):
         ACTIONS.append({'action': 'greyscale', 'val': {}})
         OPTION = ''
 
+# Rotate gambar
 def func_rotate(degree):
     print('rotating...')
     global img
     global shape
+    # P1, titik pusat
+    # P2, berapa derajat
+    # P3, scaling? 1 = tidak discale
     M = cv2.getRotationMatrix2D((shape[0]/ 2, shape[1] / 2), degree, 1)
     res = cv2.warpAffine(img, M, (shape[0], shape[1]))
     img = res
 
+# Resize gambar
 def func_resize(scale):
     print('resizing...')
     global img
     global shape
+    # P1, img
+    # P2, scale tinggi
+    # P3, scale lebar
+    # P4, algoritma
     res = cv2.resize(img, (int(shape[0] * scale), int(shape[1] * scale)), interpolation = cv2.INTER_CUBIC)
     img = res
 
+# Flip gambar
 def func_flip(axis):
     print('flipping...')
     global img
@@ -95,9 +107,12 @@ def func_flip(axis):
         axis_num = -1
     else:
         axis_num = 0
+    # P1, img
+    # P2, axis
     res = cv2.flip(img, axis_num)
     img = res
 
+# Nyari pinggiran
 def func_edgedetect(t_lower, t_high):
     print('detecting edges...')
     global img
@@ -105,6 +120,7 @@ def func_edgedetect(t_lower, t_high):
     res = cv2.Canny(img, t_lower, t_high)
     img = res
 
+# Memburamkan
 def func_blur(method):
     print('applying blur...')
     global img
@@ -118,6 +134,7 @@ def func_blur(method):
         res = cv2.GaussianBlur(img, (7, 7), 0)
     img = res
 
+# Hitam putih
 def func_greyscale():
     print('bimsalabim...')
     global img
@@ -125,7 +142,9 @@ def func_greyscale():
     res = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img = res
 
+# Jalanin function
 def execute_actions():
+    print(ACTIONS)
     for i, iv in enumerate(ACTIONS):
         exec = 'func_'+iv['action']+'('
         index = 0
@@ -138,6 +157,7 @@ def execute_actions():
         exec += ')'
         eval(exec)
 
+# Main Function
 def main():
     get_input()
     try:
@@ -145,10 +165,12 @@ def main():
         global shape 
         img = cv2.imread(filename)
         shape = img.shape[:2]
+        print(shape)
         execute_actions()
         cv2.imwrite('result.jpg', img)
     except IOError:
         print('File error')
 
+# Entry
 if __name__ == "__main__":
     main();
