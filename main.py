@@ -144,7 +144,6 @@ def func_greyscale():
 
 # Jalanin function
 def execute_actions():
-    print(ACTIONS)
     for i, iv in enumerate(ACTIONS):
         exec = 'func_'+iv['action']+'('
         index = 0
@@ -165,7 +164,8 @@ def main():
         global shape 
         img = cv2.imread(filename)
         shape = img.shape[:2]
-        print(shape)
+        # print(img)
+        # print(shape)
         execute_actions()
         cv2.imwrite('result.jpg', img)
     except IOError:
